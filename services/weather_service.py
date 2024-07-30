@@ -1,0 +1,20 @@
+import requests
+
+class WeatherService(object):
+    API_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&APPID={}&units=metric"
+    API_KEY = "3b31a7e394e41c3a30759dfde1a3383e"
+    
+    def get_weather_data(self):
+        city_name = "anand"
+        r = requests.get(WeatherService.API_URL.format(city_name, WeatherService.API_KEY))
+        weather_data = (r.json())
+        temp = self._extract_temp(weather_data)
+        description = self._extract_desc(weather_data)
+        return "Currently, in {} \n\t, its {} degrees \n\twith {}".format(city_name, temp, description)
+    
+    def _extract_temp(self, weatherdata):
+        temp = weatherdata['main']['temp']
+        return temp
+
+    def _extract_desc(self, weatherdata):
+        return weatherdata['weather'][0]['description']
